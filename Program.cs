@@ -29,22 +29,35 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add Memory Cache
+builder.Services.AddMemoryCache();
+
 // Add Rate Limiting
-builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
-//builder.Services.AddSingleton<IRateLimitStore<RateLimitRule>, MemoryCacheRateLimitStore>();
-builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
 builder.Services.Configure<IpRateLimitOptions>(options =>
 {
+    options.EnableEndpointRateLimiting = true;
+    options.StackBlockedRequests = false;
+    options.HttpStatusCode = 429;
+    options.RealIpHeader = "X-Real-IP";
+    options.ClientIdHeader = "X-ClientId";
     options.GeneralRules = new List<RateLimitRule>
     {
          new RateLimitRule
          {
+             //Endpoint = "GET:/employee/getAllEmployees",
              Endpoint = "*",
              Period = "1m",
-             Limit = 100
+             Limit = 3
          }
     };
 });
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+//builder.Services.AddSingleton<IRateLimitStore<RateLimitRule>, MemoryCacheRateLimitStore>();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddInMemoryRateLimiting();
 
 // Add Encryption Service
 //builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
@@ -61,7 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseIpRateLimiting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

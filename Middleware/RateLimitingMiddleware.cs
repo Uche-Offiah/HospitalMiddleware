@@ -16,23 +16,23 @@ namespace HospitalMiddleware.Middleware
             _processor = processor;
         }
 
-        public async Task Invoke(HttpContext context)
-        {
-            var identity = context.User.Identity as ClaimsIdentity;
-            if (identity != null && identity.IsAuthenticated)
-            {
-                var clientId = identity.FindFirst("client_id")?.Value;
-                var rateLimitCounter = await _processor.ProcessRequestAsync(context, _options.GeneralRules.FirstOrDefault());
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    var identity = context.User.Identity as ClaimsIdentity;
+        //    if (identity != null && identity.IsAuthenticated)
+        //    {
+        //        var clientId = identity.FindFirst("client_id")?.Value;
+        //        var rateLimitCounter = await _processor.ProcessRequestAsync(context, _options.GeneralRules.FirstOrDefault());
 
-                if (!rateLimitCounter.IsWhitelisted && rateLimitCounter.Counter >= rateLimitCounter.Limit)
-                {
-                    context.Response.StatusCode = 429; // Too Many Requests
-                    await context.Response.WriteAsync("Rate limit exceeded. Try again later.");
-                    return;
-                }
-            }
+        //        if (!rateLimitCounter.IsWhitelisted && rateLimitCounter.Counter >= rateLimitCounter.Limit)
+        //        {
+        //            context.Response.StatusCode = 429; // Too Many Requests
+        //            await context.Response.WriteAsync("Rate limit exceeded. Try again later.");
+        //            return;
+        //        }
+        //    }
 
-            await _next(context);
-        }
+        //    await _next(context);
+        //}
     }
 }

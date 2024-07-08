@@ -1,3 +1,4 @@
+using HospitalMiddleware.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalMiddleware.Controllers
@@ -21,7 +22,19 @@ namespace HospitalMiddleware.Controllers
         [HttpGet(Name = "GetHospitalDetails")]
         public IEnumerable<object> Get()
         {
-            return null;
+            var patientList = new List<Patient>();   
+            var patient = new Patient
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateTime(1985, 5, 15),
+                MedicalRecordNumber = "MRN12345"
+            };
+
+            patientList.Add(patient);
+
+            return patientList;
         }
     }
 }
