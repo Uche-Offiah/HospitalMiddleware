@@ -19,26 +19,26 @@ namespace HospitalMiddleware.Middleware
             _config.RegisterResolvers();
         }
 
-        public async Task Invoke(HttpContext context)
-        {
-            var clientRequestIdentity = ResolveIdentityAsync(context);
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    var clientRequestIdentity = ResolveIdentityAsync(context);
 
-            var identity = context.User.Identity as ClaimsIdentity;
-            if (identity != null && identity.IsAuthenticated)
-            {
-                var clientId = identity.FindFirst("client_id")?.Value;
-                var rateLimitCounter = await _processor.ProcessRequestAsync(clientRequestIdentity, _options.GeneralRules.FirstOrDefault());
+        //    var identity = context.User.Identity as ClaimsIdentity;
+        //    if (identity != null && identity.IsAuthenticated)
+        //    {
+        //        var clientId = identity.FindFirst("client_id")?.Value;
+        //        var rateLimitCounter = await _processor.ProcessRequestAsync(clientRequestIdentity, _options.GeneralRules.FirstOrDefault());
 
-                if (!rateLimitCounter.IsWhitelisted && rateLimitCounter.Counter >= rateLimitCounter.Limit)
-                {
-                    context.Response.StatusCode = 429; // Too Many Requests
-                    await context.Response.WriteAsync("Rate limit exceeded. Try again later.");
-                    return;
-                }
-            }
+        //        if (!rateLimitCounter.IsWhitelisted && rateLimitCounter.Counter >= rateLimitCounter.Limit)
+        //        {
+        //            context.Response.StatusCode = 429; // Too Many Requests
+        //            await context.Response.WriteAsync("Rate limit exceeded. Try again later.");
+        //            return;
+        //        }
+        //    }
 
-            await _next(context);
-        }
+        //    await _next(context);
+        //}
 
         // Implementation of ResolveIdentityAsync that Extracts httpRequest information for clientRequestIdentity
 

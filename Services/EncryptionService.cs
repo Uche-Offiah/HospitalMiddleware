@@ -11,8 +11,8 @@ namespace HospitalMiddleware.Services
 
         public EncryptionService()
         {
-            _key = Encoding.UTF8.GetBytes("your_secret_key_here");
-            _iv = Encoding.UTF8.GetBytes("your_iv_here");
+            _key = Encoding.UTF8.GetBytes("EncryptionKey123");
+            _iv = Encoding.UTF8.GetBytes("EncryptionIV1234");
         }
 
         public string Encrypt(string plainText)

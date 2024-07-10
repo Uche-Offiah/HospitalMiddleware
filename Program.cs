@@ -1,7 +1,11 @@
 using AspNetCoreRateLimit;
+using HospitalMiddleware.Interfaces;
+using HospitalMiddleware.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Azure.Management.Storage.Models;
+//using Microsoft.Azure.Management.Storage.Models;
+//using Microsoft.Azure.Management.Storage.Models;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +31,15 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true,
     };
+});
+
+// Add Redis
+//builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost"));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(provider =>
+{
+    var configuration = ConfigurationOptions.Parse(builder.Configuration["RedisConnection"]);
+    return ConnectionMultiplexer.Connect(configuration);
 });
 
 // Add Memory Cache
@@ -60,7 +73,8 @@ builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrateg
 builder.Services.AddInMemoryRateLimiting();
 
 // Add Encryption Service
-//builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+builder.Services.AddSingleton<RedisCacheService, RedisCacheService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
