@@ -1,0 +1,20 @@
+﻿version: '3.4'
+
+services:
+  hospitalmiddleware:
+    image: hospitalmiddleware
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - REDIS_CONNECTION=redis
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
