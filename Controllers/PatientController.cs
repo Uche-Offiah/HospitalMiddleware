@@ -1,11 +1,13 @@
 ﻿using HospitalMiddleware.Interfaces;
 using HospitalMiddleware.Model;
 using HospitalMiddleware.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace HospitalMiddleware.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class PatientController : ControllerBase

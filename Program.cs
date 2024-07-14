@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Microsoft.Azure.Management.Storage.Models;
 //using Microsoft.Azure.Management.Storage.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using StackExchange.Redis;
 using System.Text;
@@ -79,7 +80,32 @@ builder.Services.AddSingleton<RedisCacheService, RedisCacheService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    options =>
+    {
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer"
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // Adding serilog logging
 builder.Host.UseSerilog((context, configuration) =>

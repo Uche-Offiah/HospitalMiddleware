@@ -1,8 +1,10 @@
 using HospitalMiddleware.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalMiddleware.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class HospitalController : ControllerBase
