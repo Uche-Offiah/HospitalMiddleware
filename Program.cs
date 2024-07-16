@@ -35,6 +35,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
+
 // Add Redis
 //builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost"));
 
@@ -123,6 +125,9 @@ app.UseIpRateLimiting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+IConfiguration configuration = app.Configuration;
+IWebHostEnvironment environment = app.Environment;
 
 app.MapControllers();
 

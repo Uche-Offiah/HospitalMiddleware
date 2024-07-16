@@ -8,6 +8,8 @@ using System.Text;
 
 namespace HospitalMiddleware.Controllers
 {
+    //[Route("api/[controller]")]
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -23,6 +25,8 @@ namespace HospitalMiddleware.Controllers
             GenericResponse response = new GenericResponse();
             if (userName != null && password != null)
             {
+                var usern = _configuration["AdminUser"];
+                var passw = _configuration["Password"];
                 if (password.Equals(_configuration["Password"]) && userName.Equals(_configuration["AdminUser"]))
                 {
                     var issuer = _configuration["Jwt:Issuer"];
