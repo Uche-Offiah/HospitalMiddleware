@@ -1,7 +1,10 @@
 using AspNetCoreRateLimit;
 using HospitalMiddleware.Interfaces;
+using HospitalMiddleware.Model;
 using HospitalMiddleware.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+
 //using Microsoft.Azure.Management.Storage.Models;
 //using Microsoft.Azure.Management.Storage.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -34,6 +37,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
     };
 });
+
+builder.Services.AddDbContext<HospitalMiddlewareContext>(options =>
+options.UseSqlServer(builder.Configuration["ConnectionStrings:HospitalMiddlewareContext"]));
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
 
@@ -130,5 +136,13 @@ IConfiguration configuration = app.Configuration;
 IWebHostEnvironment environment = app.Environment;
 
 app.MapControllers();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+
+    var context = services.GetRequiredService<HospitalMiddlewareContext>();
+    context.Database.Migrate();
+}
 
 app.Run();
