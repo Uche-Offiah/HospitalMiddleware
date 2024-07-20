@@ -16,5 +16,6 @@ namespace HospitalMiddleware.Model
             optionsBuilder.UseSqlServer(_configuration.GetConnectionString("HospitalMiddleWareInstance"));
         }
         public virtual DbSet<Patient> Patients { get; set; }
+        public virtual DbSet<Hospital> Hospitals { get; set;}
     }
 }
