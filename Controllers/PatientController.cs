@@ -46,5 +46,12 @@ namespace HospitalMiddleware.Controllers
 
             return Ok(patient);
         }
+
+        [HttpGet("{HospitalName}")]
+        public IActionResult GetHospitalByName(string searchText)
+        {           
+
+            return Ok();
+        }
     }
 }
