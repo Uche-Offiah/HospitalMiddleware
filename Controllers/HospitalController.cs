@@ -1,3 +1,4 @@
+using HospitalMiddleware.Interfaces;
 using HospitalMiddleware.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,34 +10,23 @@ namespace HospitalMiddleware.Controllers
     [Route("[controller]")]
     public class HospitalController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<HospitalController> _logger;
+        private readonly IHospitalService _hospitalService;
 
-        public HospitalController(ILogger<HospitalController> logger)
+        public HospitalController(ILogger<HospitalController> logger, IHospitalService hospitalService)
         {
             _logger = logger;
+            _hospitalService = hospitalService;
         }
 
         [HttpGet(Name = "GetHospitalDetails")]
-        public IEnumerable<object> Get()
+        public IEnumerable<object> GetHospitalDetails( string name)
         {
-            var patientList = new List<Patient>();   
-            var patient = new Patient
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                DateOfBirth = new DateTime(1985, 5, 15),
-                MedicalRecordNumber = "MRN12345"
-            };
 
-            patientList.Add(patient);
+            var response = _hospitalService.GetHosptialByName(name);
 
-            return patientList;
+            return response;
         }
     }
 }

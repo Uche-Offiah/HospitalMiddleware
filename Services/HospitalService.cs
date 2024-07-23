@@ -10,9 +10,9 @@ namespace HospitalMiddleware.Services
         {
             _dbContext = hospitalMiddlewareContext;
         }
-        public object GetHosptialByName(string plainText)
+        public IEnumerable<object> GetHosptialByName(string plainText)
         {
-            var hospital = _dbContext.Hospitals.FirstOrDefault(x => x.Name == plainText);
+            var hospital = _dbContext.Hospitals.Where(x => x.Name == plainText).ToList();
 
             return hospital;
         }

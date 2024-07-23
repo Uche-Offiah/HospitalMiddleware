@@ -2,6 +2,6 @@
 {
     public interface IHospitalService
     {
-        object GetHosptialByName(string searchText);
+        List<object> GetHosptialByName(string searchText);
     }
 }
