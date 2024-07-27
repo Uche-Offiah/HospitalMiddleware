@@ -4,6 +4,7 @@ using HospitalMiddleware.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Cryptography.Xml;
 
 namespace HospitalMiddleware.Controllers
 {
@@ -14,11 +15,13 @@ namespace HospitalMiddleware.Controllers
     {
         private readonly RedisCacheService _cache;
         private readonly IEncryptionService _encryptionService;
+        private readonly PatientService _patientService;
 
-        public PatientController(RedisCacheService cache, IEncryptionService encryptionService)
+        public PatientController(RedisCacheService cache, IEncryptionService encryptionService, PatientService patientService)
         {
             _cache = cache;
             _encryptionService = encryptionService;
+            _patientService = patientService;
         }
 
         [HttpGet("{id}")]
@@ -47,11 +50,32 @@ namespace HospitalMiddleware.Controllers
             return Ok(patient);
         }
 
-        [HttpGet("{HospitalName}")]
-        public IActionResult GetHospitalByName(string searchText)
-        {           
+        [HttpGet(Name = "GetPatientByName")]
+        public IEnumerable<object> GetPatientByName(string name)
+        {
 
-            return Ok();
+            var response = _patientService.GetPatientByName(name);
+
+            var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+
+            //await _cache.SetAsync(response..ToString(), encryptedData, TimeSpan.FromMinutes(5));
+
+
+            return response;
+        }
+
+        [HttpGet(Name = "GetPatientByName")]
+        public IEnumerable<object> GetPatientByDetailsById(string name)
+        {
+
+            var response = _patientService.GetPatientByDetailsById(name);
+
+            var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+
+            //await _cache.SetAsync(response..ToString(), encryptedData, TimeSpan.FromMinutes(5));
+
+
+            return response;
         }
     }
 }
