@@ -1,6 +1,6 @@
 ﻿namespace HospitalMiddleware.Interfaces
 {
-    public class IAuthService
+    public interface IAuthService
     {
         string Auth(string userName, string password);
     }
