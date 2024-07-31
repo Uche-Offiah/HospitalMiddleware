@@ -51,31 +51,37 @@ namespace HospitalMiddleware.Controllers
         }
 
         [HttpGet(Name = "GetPatientByName")]
-        public IEnumerable<object> GetPatientByName(string name)
+        public async Task<ActionResult<object>> GetPatientByName(string name)
         {
 
             var response = _patientService.GetPatientByName(name);
 
-            var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+            if (response != null && response.Count() > 0)
+            {
+                var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
 
-            //await _cache.SetAsync(response..ToString(), encryptedData, TimeSpan.FromMinutes(5));
+                await _cache.SetAsync(response.ToString(), encryptedData, TimeSpan.FromMinutes(5));
+                return Ok(response);
+            }
 
-
-            return response;
+            return BadRequest();
         }
 
         [HttpGet(Name = "GetPatientByName")]
-        public IEnumerable<object> GetPatientByDetailsById(string name)
+        public async Task<ActionResult<object>> GetPatientByDetailsById(string name)
         {
 
             var response = _patientService.GetPatientByDetailsById(name);
 
-            var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+            if (response != null && response.Count() > 0)
+            {
+                var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+                await _cache.SetAsync(response.ToString(), encryptedData, TimeSpan.FromMinutes(5));
 
-            //await _cache.SetAsync(response..ToString(), encryptedData, TimeSpan.FromMinutes(5));
+                return Ok(response);
+            }
 
-
-            return response;
+            return BadRequest(response);
         }
     }
 }
