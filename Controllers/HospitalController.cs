@@ -40,5 +40,22 @@ namespace HospitalMiddleware.Controllers
 
             return BadRequest(response);
         }
+
+        [HttpGet(Name = "GetHospitalDetailsById")]
+        public async Task<ActionResult<object>> GetHospitalDetailsById(string Id)
+        {
+
+            var response = _hospitalService.GetHospitalDetailsById(Id);
+
+            if (response != null)
+            {
+                var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+                await _cache.SetAsync(response.ToString(), encryptedData, TimeSpan.FromMinutes(5));
+
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
     }
 }

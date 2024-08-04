@@ -16,5 +16,12 @@ namespace HospitalMiddleware.Services
 
             return hospital;
         }
+
+        public Hospital GetHospitalDetailsById(string Id)
+        {
+            var hospital = _dbContext.Hospitals.Where(x => x.Name == Id).FirstOrDefault();
+
+            return hospital;
+        }
     }
 }
