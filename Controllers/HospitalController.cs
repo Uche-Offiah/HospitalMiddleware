@@ -57,5 +57,22 @@ namespace HospitalMiddleware.Controllers
 
             return BadRequest(response);
         }
+
+        [HttpGet(Name = "GetActiveHospitals")]
+        public async Task<ActionResult<Hospital>> GetActiveHospitals()
+        {
+
+            var response = _hospitalService.GetActiveHospitals();
+
+            if (response != null)
+            {
+                var encryptedData = _encryptionService.Encrypt(JsonConvert.SerializeObject(response));
+                await _cache.SetAsync(response.ToString(), encryptedData, TimeSpan.FromMinutes(5));
+
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
     }
 }

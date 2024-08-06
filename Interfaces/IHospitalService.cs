@@ -7,5 +7,7 @@ namespace HospitalMiddleware.Interfaces
         List<object> GetHosptialByName(string searchText);
 
         Hospital GetHospitalDetailsById(string Id);
+
+        List<Hospital> GetActiveHospitals();
     }
 }

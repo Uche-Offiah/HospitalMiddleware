@@ -23,5 +23,12 @@ namespace HospitalMiddleware.Services
 
             return hospital;
         }
+
+        public Hospital GetActiveHospitals()
+        {
+            var hospital = _dbContext.Hospitals.Where(x => x.IsActive == true && x.IsDeleted == false).FirstOrDefault();
+
+            return hospital;
+        }       
     }
 }

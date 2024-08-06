@@ -67,7 +67,7 @@ namespace HospitalMiddleware.Controllers
             return BadRequest();
         }
 
-        [HttpGet(Name = "GetPatientByName")]
+        [HttpGet(Name = "GetPatientByDetailsById")]
         public async Task<ActionResult<object>> GetPatientByDetailsById(string name)
         {
 
