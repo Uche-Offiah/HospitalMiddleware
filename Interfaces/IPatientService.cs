@@ -7,5 +7,6 @@ namespace HospitalMiddleware.Interfaces
         List<Patient> GetPatientByName(string searchText);
         Patient GetPatientById(int searchText);
         List<object> GetPatientDetail(string searchText);
+        List<Patient> GetActiveHospitals();
     }
 }

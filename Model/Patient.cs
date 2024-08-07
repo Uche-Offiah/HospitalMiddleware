@@ -7,5 +7,7 @@
         public string? LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? MedicalRecordNumber { get; set; }
+        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

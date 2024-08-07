@@ -30,5 +30,12 @@ namespace HospitalMiddleware.Services
 
             return patients;
         }
+
+        public Patient GetActivePatients()
+        {
+            var patients = _dbContext.Patients.Where(x => x.IsActive == true && x.IsDeleted == false).FirstOrDefault();
+
+            return patients;
+        }
     }
 }
