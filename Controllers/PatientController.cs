@@ -117,5 +117,20 @@ namespace HospitalMiddleware.Controllers
 
             return BadRequest(response);
         }
+
+        [HttpDelete(Name = "PulllActivePatients")]// fix this tomorrow
+        public ActionResult DeletePatients()
+        {
+
+            var response = _patientService.GetActivePatients();
+
+            if (response != null)
+            {
+
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
     }
 }

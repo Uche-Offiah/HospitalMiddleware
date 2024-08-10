@@ -8,5 +8,6 @@ namespace HospitalMiddleware.Interfaces
         Patient GetPatientById(int searchText);
         List<object> GetPatientDetail(string searchText);
         List<Patient> GetActiveHospitals();
+        void DeletePatient(string Id);
     }
 }
