@@ -49,5 +49,17 @@ namespace HospitalMiddleware.Services
                 _dbContext.SaveChanges();
             }
         }
+
+        public void Patient()
+        {
+            var patient = _dbContext.Patients.Where(x => x.IsActive == true && x.IsDeleted == false).FirstOrDefault();
+            if (patient != null)
+            {
+                patient.IsActive = false;
+
+                _dbContext.Patients.Add(patient);
+                _dbContext.SaveChanges();
+            }
+        }
     }
 }
