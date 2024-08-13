@@ -118,7 +118,7 @@ namespace HospitalMiddleware.Controllers
             return BadRequest(response);
         }
 
-        [HttpDelete(Name = "PulllActivePatients")]// fix this tomorrow
+        [HttpDelete(Name = "DeletePatients")]// fix this tomorrow
         public ActionResult DeletePatients()
         {
 
@@ -129,7 +129,6 @@ namespace HospitalMiddleware.Controllers
 
                 return Ok(response);
             }
-
             return BadRequest(response);
         }
     }
